@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Shpigel's Workspace</title>
+<meta name="description" content="Apps and games made by Ori: a chess opening trainer, a planner, a chess.com game review extension, a Hebrew party game and a Python dungeon game.">
+<meta property="og:title" content="Shpigel's Workspace">
+<meta property="og:description" content="Apps and games made by Ori: chess tools, a planner, a party game and a dungeon game.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://irotheangel.github.io/workspace/">
+<meta property="og:image" content="https://irotheangel.github.io/workspace/img/workspace-512.png">
+<meta name="theme-color" content="#F4F3EE" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#161615" media="(prefers-color-scheme: dark)">
+<link rel="icon" type="image/png" href="favicon.png">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<style>
+/* Colours, type and shapes copied from Schedule Maker */
+:root{color-scheme:light dark;--bg:#F4F3EE;--card:#FFFFFF;--line:#E4E1D8;--text:#1F1E1D;--mute:#6F6D66;--acc:#C15F3C;--soft:#EBE9E1;--tint:#F7EBE5;--r2:12px;--r3:16px;--shadow:0 1px 2px rgba(31,30,29,.05),0 6px 20px rgba(31,30,29,.06)}
+@media(prefers-color-scheme:dark){:root{--bg:#161615;--card:#20201E;--line:#33332F;--text:#F0EFEA;--mute:#9C9A94;--acc:#D97757;--soft:#2C2C2A;--tint:#33251F;--shadow:0 6px 20px rgba(0,0,0,.35)}}
+*{box-sizing:border-box;margin:0;padding:0}
+html{-webkit-text-size-adjust:100%}
+body{font-family:ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;background:var(--bg);color:var(--text);min-height:100vh;line-height:1.5;-webkit-font-smoothing:antialiased;-webkit-tap-highlight-color:transparent}
+a{color:inherit}
+.serif{font-family:ui-serif,Georgia,Cambria,"Times New Roman",serif;font-weight:400}
+.wrap{max-width:1020px;margin:auto;padding:0 16px}
+
+header{padding:calc(40px + env(safe-area-inset-top,0px)) 0 8px;display:flex;align-items:center;gap:18px}
+.mark{width:64px;height:64px;border-radius:16px;flex-shrink:0;box-shadow:var(--shadow)}
+.kicker{font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--mute)}
+h1{font-size:40px;letter-spacing:-.8px;line-height:1.1;margin-top:4px;text-wrap:balance}
+.sum{color:var(--mute);font-size:16px;margin:14px 0 0;max-width:60ch;text-wrap:pretty}
+
+.label{display:flex;justify-content:space-between;align-items:baseline;font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--mute);margin:36px 2px 12px}
+.grid{display:grid;grid-template-columns:1fr;gap:16px}
+@media(min-width:760px){.grid{grid-template-columns:1fr 1fr}}
+
+.card{background:var(--card);border:1px solid var(--line);border-radius:20px;padding:20px;box-shadow:var(--shadow);display:flex;flex-direction:column;min-width:0}
+.top{display:flex;align-items:center;gap:14px}
+.logo{width:64px;height:64px;border-radius:16px;flex-shrink:0;object-fit:contain}
+.logo.flat{background:var(--soft);padding:8px}
+.card h2{font-size:24px;line-height:1.2}
+.he{font-family:inherit;font-size:16px;color:var(--mute);margin-inline-start:6px}
+.tags{display:flex;flex-wrap:wrap;gap:6px;margin-top:6px}
+.chip{display:inline-flex;align-items:center;white-space:nowrap;border:1px solid var(--line);border-radius:999px;padding:3px 10px;font-size:12px;color:var(--mute)}
+.desc{margin-top:14px;font-size:15px;text-wrap:pretty}
+.btns{display:flex;flex-wrap:wrap;gap:8px;margin-top:auto;padding-top:18px}
+.btn{white-space:nowrap;display:inline-flex;align-items:center;justify-content:center;gap:8px;border:1px solid var(--line);background:var(--card);border-radius:12px;padding:10px 15px;font-size:15px;font-weight:500;transition:transform .12s,background .15s;text-decoration:none;color:inherit}
+.btn:hover{background:var(--soft)}.btn:active{transform:scale(.97)}
+.btn.acc{background:var(--acc);border-color:var(--acc);color:#fff}.btn.acc:hover{filter:brightness(1.06)}
+.btn small{font-size:12px;font-weight:400;opacity:.75}
+.btn:focus-visible,summary:focus-visible,.foot a:focus-visible{outline:2px solid var(--acc);outline-offset:2px}
+.ic{width:18px;height:18px;flex-shrink:0;background:currentColor;-webkit-mask:var(--i) center/contain no-repeat;mask:var(--i) center/contain no-repeat}
+.i-play{--i:url(icons/play.png)}.i-dl{--i:url(icons/download.png)}.i-info{--i:url(icons/info.png)}.i-code{--i:url(icons/code.png)}
+.note{margin-top:auto;padding-top:18px;font-size:14px;color:var(--mute);display:flex;gap:8px;align-items:flex-start}
+.note .ic{margin-top:2px}
+
+details{margin-top:14px;border-top:1px solid var(--line);padding-top:12px}
+summary{cursor:pointer;list-style:none;display:inline-flex;align-items:center;gap:8px;font-size:14px;color:var(--mute);border-radius:8px}
+summary::-webkit-details-marker{display:none}
+summary::after{content:"";width:7px;height:7px;border-right:1.5px solid currentColor;border-bottom:1.5px solid currentColor;transform:rotate(45deg);margin:-3px 0 0 2px;transition:transform .2s}
+details[open] summary::after{transform:rotate(-135deg);margin-top:3px}
+summary:hover{color:var(--text)}
+.steps{margin-top:10px;font-size:14px;color:var(--text)}
+.steps b{display:block;font-size:12px;letter-spacing:.06em;text-transform:uppercase;color:var(--mute);font-weight:500;margin-top:10px}
+.steps b:first-child{margin-top:0}
+.steps ol{padding-inline-start:20px;margin-top:4px}
+.steps li{margin-top:3px}
+code{font-family:ui-monospace,Consolas,monospace;font-size:13px;background:var(--soft);border-radius:6px;padding:1px 5px}
+
+.foot{margin:48px 0 0;padding:20px 0 calc(32px + env(safe-area-inset-bottom,0px));border-top:1px solid var(--line);font-size:13px;color:var(--mute);display:flex;flex-wrap:wrap;gap:6px 18px;justify-content:space-between}
+.foot a{text-decoration:underline;text-underline-offset:2px}
+
+@media(max-width:480px){h1{font-size:32px}.mark{width:52px;height:52px;border-radius:14px}.card{padding:18px}.btn{flex:1 1 auto}}
+@media(prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header>
+  <img class="mark" src="img/workspace-512.png" alt="">
+  <div>
+    <div class="kicker">Ori's projects</div>
+    <h1 class="serif">Shpigel's Workspace</h1>
+  </div>
+</header>
+<p class="sum">Apps and games I've made: two chess tools, a planner that keeps me focused, a Hebrew party game and a dark dungeon game in Python.</p>
+
+<div class="label"><span>Apps and tools</span><span>3</span></div>
+<div class="grid">
+
+  <article class="card" id="repertoire-trainer">
+    <div class="top">
+      <img class="logo" src="img/repertoire-trainer.png" alt="Repertoire Trainer logo">
+      <div>
+        <h2 class="serif">Repertoire Trainer</h2>
+        <div class="tags"><span class="chip">Website</span><span class="chip">Windows</span><span class="chip">Android</span></div>
+      </div>
+    </div>
+    <p class="desc">Learn a whole chess opening repertoire with a coach that talks you through every move. Nearly 500 lines for White and Black (Catalan, Queen's Gambit, Vienna, Caro-Kann, Sicilian and more), plus puzzles, a daily streak, XP and games against the computer.</p>
+    <div class="btns">
+      <a class="btn acc" href="https://irotheangel.github.io/chess-trainer/"><i class="ic i-play"></i>Open</a>
+      <a class="btn" href="https://github.com/IroTheAngel/chess-trainer/releases/latest/download/RepertoireTrainer-Setup.exe"><i class="ic i-dl"></i>Windows <small>2 MB</small></a>
+      <a class="btn" href="https://github.com/IroTheAngel/chess-trainer/releases/latest/download/RepertoireTrainer.apk"><i class="ic i-dl"></i>Android <small>0.3 MB</small></a>
+    </div>
+    <details>
+      <summary><i class="ic i-info"></i>How to install the apps</summary>
+      <div class="steps">
+        <b>Windows</b>
+        <ol><li>Open <code>RepertoireTrainer-Setup.exe</code>. It installs itself and adds a desktop shortcut.</li><li>If Windows says it protected your PC, click <strong>More info</strong>, then <strong>Run anyway</strong>.</li></ol>
+        <b>Android</b>
+        <ol><li>Open <code>RepertoireTrainer.apk</code> on your phone.</li><li>If Android asks, let your browser install unknown apps, then tap <strong>Install</strong>.</li></ol>
+        <b>Bring your progress</b>
+        <ol><li>On the website's home page, use <strong>Back up or move progress</strong>, then load the backup in the app.</li></ol>
+      </div>
+    </details>
+  </article>
+
+  <article class="card" id="schedule-maker">
+    <div class="top">
+      <img class="logo" src="img/schedule-maker.png" alt="Schedule Maker logo">
+      <div>
+        <h2 class="serif">Schedule Maker</h2>
+        <div class="tags"><span class="chip">Android</span><span class="chip">Windows</span><span class="chip">Website</span></div>
+      </div>
+    </div>
+    <p class="desc">A daily and weekly planner. Add tasks with times, let Claude turn piano and study sessions into timed blocks, and start Focus mode with rain or wave sounds. On Android, Focus mode also blocks YouTube, TikTok and other distracting apps.</p>
+    <div class="btns">
+      <a class="btn acc" href="https://github.com/IroTheAngel/schedule-maker/releases/latest/download/ScheduleMaker.apk"><i class="ic i-dl"></i>Android <small>3.5 MB</small></a>
+      <a class="btn" href="https://github.com/IroTheAngel/schedule-maker/releases/latest/download/ScheduleMaker-Setup.exe"><i class="ic i-dl"></i>Windows <small>121 MB</small></a>
+      <a class="btn" href="https://irotheangel.github.io/schedule-maker/"><i class="ic i-play"></i>Open in browser</a>
+    </div>
+    <details>
+      <summary><i class="ic i-info"></i>How to install</summary>
+      <div class="steps">
+        <b>Android</b>
+        <ol><li>Open <code>ScheduleMaker.apk</code> on your phone. If Android asks, let your browser install unknown apps, then tap <strong>Install</strong>.</li><li>The first time you press <strong>Focus</strong>, turn on <strong>Usage access</strong> and <strong>Display over other apps</strong> for Schedule Maker, so it can block apps.</li><li>New versions install over the old one and keep your schedule.</li></ol>
+        <b>Windows</b>
+        <ol><li>Open <code>ScheduleMaker-Setup.exe</code>. If Windows says it protected your PC, click <strong>More info</strong>, then <strong>Run anyway</strong>.</li></ol>
+      </div>
+    </details>
+  </article>
+
+  <article class="card" id="free-game-review">
+    <div class="top">
+      <img class="logo flat" src="img/free-game-review.png" alt="Free Game Review logo">
+      <div>
+        <h2 class="serif">Free Game Review</h2>
+        <div class="tags"><span class="chip">Chrome extension</span><span class="chip">chess.com</span></div>
+      </div>
+    </div>
+    <p class="desc">Review your finished chess.com games as often as you like, for free. Stockfish 18 runs in your own browser and rates every move from Brilliant to Blunder, with accuracy, an evaluation graph, a coach that explains each move, and a mode to practise your mistakes.</p>
+    <div class="btns">
+      <a class="btn acc" href="https://github.com/IroTheAngel/free-game-review/archive/refs/heads/main.zip"><i class="ic i-dl"></i>Download ZIP <small>6 MB</small></a>
+      <a class="btn" href="https://github.com/IroTheAngel/free-game-review"><i class="ic i-code"></i>GitHub</a>
+    </div>
+    <details>
+      <summary><i class="ic i-info"></i>How to install</summary>
+      <div class="steps">
+        <ol><li>Unzip the download somewhere you'll keep it, like Documents. Chrome runs the extension from that folder, so don't delete it.</li><li>In Chrome, open <code>chrome://extensions</code> and turn on <strong>Developer mode</strong> (top right).</li><li>Click <strong>Load unpacked</strong> and pick the unzipped folder (the one with <code>manifest.json</code> in it).</li><li>Pin it from the puzzle-piece menu, then click <strong>Free Review</strong> when a game ends on chess.com.</li></ol>
+      </div>
+    </details>
+  </article>
+
+</div>
+
+<div class="label"><span>Games</span><span>2</span></div>
+<div class="grid">
+
+  <article class="card" id="eretz-ir">
+    <div class="top">
+      <img class="logo" src="img/eretz-ir.png" alt="Eretz Ir logo">
+      <div>
+        <h2 class="serif">Eretz Ir <span class="he" lang="he" dir="rtl">ארץ עיר</span></h2>
+        <div class="tags"><span class="chip">Website</span><span class="chip">Android</span><span class="chip">Hebrew</span></div>
+      </div>
+    </div>
+    <p class="desc">A helper for the classic Hebrew categories game. Spin the wheel for a random letter, then everyone writes a country, a city, an animal and more that start with it. It has a turn timer, a dictionary with hints when you're stuck, and a score table for the week.</p>
+    <div class="btns">
+      <a class="btn acc" href="https://irotheangel.github.io/eretz-ir-game/eretz-ir-letter-spinner.html"><i class="ic i-play"></i>Play</a>
+      <a class="btn" href="https://github.com/IroTheAngel/eretz-ir-game/releases/latest/download/EretzIr.apk"><i class="ic i-dl"></i>Android <small>1 MB</small></a>
+    </div>
+    <details>
+      <summary><i class="ic i-info"></i>How to install on Android</summary>
+      <div class="steps">
+        <ol><li>Open <code>EretzIr.apk</code> on your phone. If Android asks, let your browser install unknown apps, then tap <strong>Install</strong>.</li><li>The app opens inside Chrome, so Chrome needs to be installed.</li></ol>
+      </div>
+    </details>
+  </article>
+
+  <article class="card" id="pulse">
+    <div class="top">
+      <img class="logo" src="img/pulse.png" alt="PULSE logo: a hooded figure inside glowing rings">
+      <div>
+        <h2 class="serif">PULSE</h2>
+        <div class="tags"><span class="chip">PC</span><span class="chip">Python</span><span class="chip">Pygame</span></div>
+      </div>
+    </div>
+    <p class="desc">A dark dungeon game where you can only see by sending out pulses that light up the walls. Every pulse drains your battery and makes noise that enemies can hear. Open chests, go down 8 floors and beat The Manager. It also has an AI that learns to play the game by itself.</p>
+    <p class="note"><i class="ic i-info"></i>Lives on my PC for now, so there's no download yet.</p>
+  </article>
+
+</div>
+
+<footer class="foot">
+  <span>Made by Ori with Claude.</span>
+  <span><a href="https://github.com/IroTheAngel">GitHub</a> · Icons from Free Icon Pack v3.1 by @gvesster</span>
+</footer>
+
+</div>
+</body>
+</html>
