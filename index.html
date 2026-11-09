@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>Luv Launcher</title>
-<meta name="description" content="Luv Launcher: open, install and launch everything Ori has made. A chess opening trainer, a planner, a packing list, a chess.com review extension, a Hebrew party game and a Python dungeon game.">
+<meta name="description" content="Luv Launcher: open, install and launch everything Ori has made. A chess opening trainer, a planner, a packing list, a calorie counter, a chess.com review extension, a Hebrew party game and a Python dungeon game.">
 <meta property="og:title" content="Luv Launcher">
 <meta property="og:description" content="Open, install and launch everything Ori has made.">
 <meta property="og:type" content="website">
@@ -268,6 +268,12 @@ const APPS = [
     web: { url: "https://irotheangel.github.io/pack-check/", label: "Open" },
     android: { url: GH + "pack-check/releases/latest/download/PackCheck.apk", size: "0.2 MB" },
     steps: [["Android", ["Open <code>PackCheck.apk</code> on your phone. " + ANDROID_STEP, "Your lists stay on your phone and work without internet."]]] },
+  { id: "platecheck", name: "Plate Check", kind: "app", topic: "Calories", logo: "img/plate-check.png", art: "#F0E2D3",
+    tags: ["Claude app", "Phone", "PC"],
+    short: "Snap your meal and Claude counts the calories.",
+    desc: "Take photos of a meal from above, from the side and close up. Claude names each food, estimates how many grams there are and adds up the calories, protein, carbs and fat. Fix any amount it got wrong, then save the meal to your daily log. It runs on claude.ai with your own Claude account, and the log is the same on your phone and PC.",
+    ext: { url: "https://claude.ai/artifact/GPaJeHv5V2sMhFRqQzczft", label: "Open in Claude" },
+    note: "Opens on claude.ai or in the Claude app. The link is private, so only Ori can open it for now." },
   { id: "review", name: "Free Game Review", kind: "app", topic: "Chess extension", logo: "img/free-game-review.png", art: "#DCEEFF",
     tags: ["Chrome extension", "chess.com"],
     short: "Review your finished chess.com games for free, as often as you like.",
@@ -328,6 +334,8 @@ function actions(a) {
   const s = st[a.id] || {};
   const out = [];
   if (s.busy) return [{ busy: true, label: s.msg || "Working…", pct: s.pct, primary: true }];
+  // Claude apps live on claude.ai: a plain link (the Windows and Android apps open it outside, where Ori is signed in)
+  if (a.ext) return [{ label: a.ext.label, icon: "play", primary: true, href: a.ext.url }];
   if (HOST === "win") {
     if (a.win) {
       out.push(s.installed ? { label: "Launch", icon: "play", primary: true, run: "launch" }
@@ -436,6 +444,7 @@ function stepsHtml(a) {
 }
 function statusLine(a) {
   const s = st[a.id] || {};
+  if (a.ext) return `<div class="status"><i class="ic i-info"></i>${a.note}</div>`;
   if (HOST === "web") return a.pcOnly ? `<div class="status"><i class="ic i-info"></i>Lives on Ori's PC for now, so there's no download yet.</div>` : "";
   if (a.pcOnly) return s.available ? `<div class="status ok"><i class="ic i-check"></i>Found on this PC.</div>` : `<div class="status"><i class="ic i-info"></i>PULSE lives on Ori's PC, so there's nothing to install yet.</div>`;
   if (HOST === "win" && !a.win && !a.zip) return `<div class="status"><i class="ic i-info"></i>Plays inside Luv Launcher. Nothing to install.</div>`;
@@ -473,7 +482,7 @@ function render() {
       if (HOST === "web") html = head("Library", APPS.length, true) + grid(APPS);
       else {
         // ready = installed, found on this PC, or (on Windows) a web game that plays inside the launcher
-        const ready = a => { const s = st[a.id] || {}; return s.installed || (a.pcOnly && s.available) || (HOST === "win" && a.web && !a.win && !a.zip); };
+        const ready = a => { const s = st[a.id] || {}; return s.installed || (a.pcOnly && s.available) || !!a.ext || (HOST === "win" && a.web && !a.win && !a.zip); };
         const have = APPS.filter(ready), rest = APPS.filter(a => !ready(a));
         html = head("Library", APPS.length, true) + head("Ready to launch", have.length) + grid(have) + head("Get more", rest.length) + grid(rest);
       }
