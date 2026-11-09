@@ -3,211 +3,500 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<title>Shpigel's Workspace</title>
-<meta name="description" content="Apps and games made by Ori: a chess opening trainer, a planner, a chess.com game review extension, a Hebrew party game and a Python dungeon game.">
-<meta property="og:title" content="Shpigel's Workspace">
-<meta property="og:description" content="Apps and games made by Ori: chess tools, a planner, a party game and a dungeon game.">
+<title>Luv Launcher</title>
+<meta name="description" content="Luv Launcher: open, install and launch everything Ori has made. A chess opening trainer, a planner, a chess.com review extension, a Hebrew party game and a Python dungeon game.">
+<meta property="og:title" content="Luv Launcher">
+<meta property="og:description" content="Open, install and launch everything Ori has made.">
 <meta property="og:type" content="website">
-<meta property="og:url" content="https://irotheangel.github.io/workspace/">
-<meta property="og:image" content="https://irotheangel.github.io/workspace/img/workspace-512.png">
+<meta property="og:url" content="https://irotheangel.github.io/luv-launcher/">
+<meta property="og:image" content="https://irotheangel.github.io/luv-launcher/img/luv-launcher-512.png">
 <meta name="theme-color" content="#F4F3EE" media="(prefers-color-scheme: light)">
 <meta name="theme-color" content="#161615" media="(prefers-color-scheme: dark)">
 <link rel="icon" type="image/png" href="favicon.png">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
 <style>
-/* Colours, type and shapes copied from Schedule Maker */
-:root{color-scheme:light dark;--bg:#F4F3EE;--card:#FFFFFF;--line:#E4E1D8;--text:#1F1E1D;--mute:#6F6D66;--acc:#C15F3C;--soft:#EBE9E1;--tint:#F7EBE5;--r2:12px;--r3:16px;--shadow:0 1px 2px rgba(31,30,29,.05),0 6px 20px rgba(31,30,29,.06)}
-@media(prefers-color-scheme:dark){:root{--bg:#161615;--card:#20201E;--line:#33332F;--text:#F0EFEA;--mute:#9C9A94;--acc:#D97757;--soft:#2C2C2A;--tint:#33251F;--shadow:0 6px 20px rgba(0,0,0,.35)}}
+/* Colours, type and shapes from Schedule Maker; launcher layout (sidebar, featured banner, library tiles) */
+:root{color-scheme:light dark;--bg:#F4F3EE;--side:#ECEAE3;--card:#FFFFFF;--line:#E4E1D8;--text:#1F1E1D;--mute:#6F6D66;--acc:#C15F3C;--soft:#EBE9E1;--tint:#F7EBE5;--green:#5E8466;--shadow:0 1px 2px rgba(31,30,29,.05),0 6px 20px rgba(31,30,29,.06)}
+@media(prefers-color-scheme:dark){:root{--bg:#161615;--side:#1C1C1B;--card:#20201E;--line:#33332F;--text:#F0EFEA;--mute:#9C9A94;--acc:#D97757;--soft:#2C2C2A;--tint:#33251F;--green:#8DB596;--shadow:0 6px 20px rgba(0,0,0,.35)}}
 *{box-sizing:border-box;margin:0;padding:0}
 html{-webkit-text-size-adjust:100%}
 body{font-family:ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;background:var(--bg);color:var(--text);min-height:100vh;line-height:1.5;-webkit-font-smoothing:antialiased;-webkit-tap-highlight-color:transparent}
 a{color:inherit}
+button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
 .serif{font-family:ui-serif,Georgia,Cambria,"Times New Roman",serif;font-weight:400}
-.wrap{max-width:1020px;margin:auto;padding:0 16px}
-
-header{padding:calc(40px + env(safe-area-inset-top,0px)) 0 8px;display:flex;align-items:center;gap:18px}
-.mark{width:64px;height:64px;border-radius:16px;flex-shrink:0;box-shadow:var(--shadow)}
 .kicker{font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--mute)}
-h1{font-size:40px;letter-spacing:-.8px;line-height:1.1;margin-top:4px;text-wrap:balance}
-.sum{color:var(--mute);font-size:16px;margin:14px 0 0;max-width:60ch;text-wrap:pretty}
+.ic{width:18px;height:18px;flex-shrink:0;background:currentColor;-webkit-mask:var(--i) center/contain no-repeat;mask:var(--i) center/contain no-repeat}
+.i-play{--i:url(icons/play.png)}.i-dl{--i:url(icons/download.png)}.i-info{--i:url(icons/info.png)}.i-code{--i:url(icons/code.png)}
+.i-home{--i:url(icons/home.png)}.i-library{--i:url(icons/library.png)}.i-apps{--i:url(icons/apps.png)}.i-games{--i:url(icons/games.png)}.i-check{--i:url(icons/check.png)}
 
-.label{display:flex;justify-content:space-between;align-items:baseline;font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--mute);margin:36px 2px 12px}
-.grid{display:grid;grid-template-columns:1fr;gap:16px}
-@media(min-width:760px){.grid{grid-template-columns:1fr 1fr}}
+/* ---------- shell ---------- */
+.shell{display:grid;grid-template-columns:240px minmax(0,1fr);min-height:100vh}
+.side{position:sticky;top:0;height:100vh;background:var(--side);border-right:1px solid var(--line);display:flex;flex-direction:column;padding:24px 14px 20px}
+.brand{display:flex;align-items:center;gap:12px;padding:0 8px 22px;text-decoration:none}
+.brand img{width:40px;height:40px;border-radius:11px}
+.brand b{font-family:ui-serif,Georgia,Cambria,serif;font-weight:400;font-size:21px;letter-spacing:-.3px;line-height:1.1}
+.nav{display:flex;flex-direction:column;gap:2px}
+.nav a{display:flex;align-items:center;gap:12px;padding:10px 12px;border-radius:12px;text-decoration:none;font-size:15px;font-weight:500;color:var(--mute);transition:background .15s,color .15s}
+.nav a .ic{width:20px;height:20px}
+.nav a:hover{background:var(--soft);color:var(--text)}
+.nav a.on{background:var(--card);color:var(--text);box-shadow:0 1px 3px rgba(0,0,0,.1)}
+.nav a.on .ic{color:var(--acc)}
+.get{margin-top:auto;background:var(--card);border:1px solid var(--line);border-radius:16px;padding:14px}
+.get p{font-size:13px;color:var(--mute);margin:4px 0 10px}
+.get .btn{width:100%;margin-top:6px;justify-content:flex-start}
+.ver{margin-top:auto;padding:0 10px;font-size:12px;color:var(--mute)}
+main{padding:32px 36px 48px;min-width:0}
+.view{max-width:1120px;margin:0 auto}
+.view.anim{animation:fade .25s ease}
+@keyframes fade{from{opacity:0;transform:translateY(4px)}}
+.mtop{display:none}
 
-.card{background:var(--card);border:1px solid var(--line);border-radius:20px;padding:20px;box-shadow:var(--shadow);display:flex;flex-direction:column;min-width:0}
-.top{display:flex;align-items:center;gap:14px}
-.logo{width:64px;height:64px;border-radius:16px;flex-shrink:0;object-fit:contain}
-.logo.flat{background:var(--soft);padding:8px}
-.card h2{font-size:24px;line-height:1.2}
-.he{font-family:inherit;font-size:16px;color:var(--mute);margin-inline-start:6px}
-.tags{display:flex;flex-wrap:wrap;gap:6px;margin-top:6px}
-.chip{display:inline-flex;align-items:center;white-space:nowrap;border:1px solid var(--line);border-radius:999px;padding:3px 10px;font-size:12px;color:var(--mute)}
-.desc{margin-top:14px;font-size:15px;text-wrap:pretty}
-.btns{display:flex;flex-wrap:wrap;gap:8px;margin-top:auto;padding-top:18px}
-.btn{white-space:nowrap;display:inline-flex;align-items:center;justify-content:center;gap:8px;border:1px solid var(--line);background:var(--card);border-radius:12px;padding:10px 15px;font-size:15px;font-weight:500;transition:transform .12s,background .15s;text-decoration:none;color:inherit}
+/* ---------- buttons ---------- */
+.btns{display:flex;flex-wrap:wrap;gap:8px}
+.btn{white-space:nowrap;display:inline-flex;align-items:center;justify-content:center;gap:8px;border:1px solid var(--line);background:var(--card);border-radius:12px;padding:10px 15px;font-size:15px;font-weight:500;transition:transform .12s,background .15s;text-decoration:none;color:inherit;position:relative;overflow:hidden}
 .btn:hover{background:var(--soft)}.btn:active{transform:scale(.97)}
 .btn.acc{background:var(--acc);border-color:var(--acc);color:#fff}.btn.acc:hover{filter:brightness(1.06)}
 .btn small{font-size:12px;font-weight:400;opacity:.75}
-.btn:focus-visible,summary:focus-visible,.foot a:focus-visible{outline:2px solid var(--acc);outline-offset:2px}
-.ic{width:18px;height:18px;flex-shrink:0;background:currentColor;-webkit-mask:var(--i) center/contain no-repeat;mask:var(--i) center/contain no-repeat}
-.i-play{--i:url(icons/play.png)}.i-dl{--i:url(icons/download.png)}.i-info{--i:url(icons/info.png)}.i-code{--i:url(icons/code.png)}
-.note{margin-top:auto;padding-top:18px;font-size:14px;color:var(--mute);display:flex;gap:8px;align-items:flex-start}
-.note .ic{margin-top:2px}
+.btn[disabled]{cursor:default;opacity:.6;transform:none}
+.btn.busy{background:var(--soft);border-color:var(--line);color:var(--text);opacity:1}
+.btn.busy .bar{position:absolute;left:0;bottom:0;height:3px;background:var(--acc);transition:width .3s}
+.btn:focus-visible,.nav a:focus-visible,.tile a:focus-visible,summary:focus-visible,.dots button:focus-visible,.back:focus-visible{outline:2px solid var(--acc);outline-offset:2px}
 
-details{margin-top:14px;border-top:1px solid var(--line);padding-top:12px}
-summary{cursor:pointer;list-style:none;display:inline-flex;align-items:center;gap:8px;font-size:14px;color:var(--mute);border-radius:8px}
+/* ---------- featured banner ---------- */
+.hero{position:relative;display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,1fr);background:var(--card);border:1px solid var(--line);border-radius:24px;box-shadow:var(--shadow);overflow:hidden;min-height:320px}
+.htext{padding:36px 36px 56px;display:flex;flex-direction:column;justify-content:center;gap:10px}
+.htext h2{font-size:44px;line-height:1.05;letter-spacing:-.8px}
+.htext p{color:var(--mute);font-size:16px;max-width:46ch;text-wrap:pretty}
+.htext .btns{margin-top:10px}
+.art{position:relative;background:var(--bg-art);display:grid;place-items:center;overflow:hidden}
+.art::before{content:"";position:absolute;inset:0;background:radial-gradient(circle at 50% 45%,rgba(255,255,255,.28),transparent 62%)}
+.art img{position:relative;width:min(46%,190px);aspect-ratio:1;object-fit:contain;border-radius:22%;filter:drop-shadow(0 12px 28px rgba(0,0,0,.28))}
+.dots{position:absolute;left:36px;bottom:20px;display:flex;gap:6px}
+.dots button{width:8px;height:8px;border-radius:99px;background:var(--line);transition:width .25s,background .25s}
+.dots button.on{width:24px;background:var(--acc)}
+
+/* ---------- library ---------- */
+.head{display:flex;justify-content:space-between;align-items:baseline;margin:36px 2px 14px}
+.head:first-child{margin-top:4px}
+.head h1{font-size:34px;letter-spacing:-.6px;line-height:1.15}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:18px}
+.tile{background:var(--card);border:1px solid var(--line);border-radius:20px;box-shadow:var(--shadow);overflow:hidden;display:flex;flex-direction:column;transition:transform .15s}
+.tile:hover{transform:translateY(-2px)}
+.cover{position:relative;display:grid;place-items:center;aspect-ratio:4/3;background:var(--bg-art);text-decoration:none;overflow:hidden}
+.cover::before{content:"";position:absolute;inset:0;background:radial-gradient(circle at 50% 42%,rgba(255,255,255,.26),transparent 64%)}
+.cover img{position:relative;width:44%;aspect-ratio:1;object-fit:contain;border-radius:22%;filter:drop-shadow(0 8px 18px rgba(0,0,0,.25));transition:transform .2s}
+.tile:hover .cover img{transform:scale(1.05)}
+.badge{position:absolute;top:10px;right:10px;display:inline-flex;align-items:center;gap:5px;background:rgba(255,255,255,.92);color:#2f5a38;border-radius:99px;padding:3px 9px 3px 7px;font-size:12px;font-weight:600}
+.badge .ic{width:13px;height:13px}
+.tbody{padding:14px 16px 16px;display:flex;flex-direction:column;gap:2px;flex:1}
+.tbody h3{font-size:20px;line-height:1.25}
+.tbody h3 a{text-decoration:none}
+.tsub{font-size:13px;color:var(--mute)}
+.tbody .btn{margin-top:auto;width:100%}
+.tbody .spacer{height:12px}
+.empty{color:var(--mute);font-size:15px;padding:8px 2px}
+
+/* ---------- detail ---------- */
+.back{display:inline-flex;align-items:center;gap:8px;font-size:14px;color:var(--mute);text-decoration:none;padding:6px 10px 6px 4px;border-radius:10px;margin-bottom:14px}
+.back::before{content:"";width:8px;height:8px;border-left:2px solid currentColor;border-bottom:2px solid currentColor;transform:rotate(45deg);margin-left:6px}
+.back:hover{color:var(--text)}
+.detail{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.1fr);gap:32px;align-items:start}
+.detail .cover{border-radius:24px;box-shadow:var(--shadow);border:1px solid var(--line)}
+.dinfo h1{font-size:44px;line-height:1.05;letter-spacing:-.8px;margin-top:6px}
+.tags{display:flex;flex-wrap:wrap;gap:6px;margin-top:12px}
+.chip{display:inline-flex;align-items:center;white-space:nowrap;border:1px solid var(--line);border-radius:999px;padding:3px 10px;font-size:12px;color:var(--mute)}
+.desc{margin-top:16px;font-size:16px;text-wrap:pretty}
+.dinfo .btns{margin-top:22px}
+.status{margin-top:12px;font-size:14px;color:var(--mute);display:flex;align-items:center;gap:8px;min-height:21px}
+.status.ok{color:var(--green)}
+details{margin-top:22px;background:var(--card);border:1px solid var(--line);border-radius:16px;padding:14px 16px}
+summary{cursor:pointer;list-style:none;display:flex;align-items:center;gap:8px;font-size:15px;font-weight:500}
 summary::-webkit-details-marker{display:none}
-summary::after{content:"";width:7px;height:7px;border-right:1.5px solid currentColor;border-bottom:1.5px solid currentColor;transform:rotate(45deg);margin:-3px 0 0 2px;transition:transform .2s}
+summary::after{content:"";width:7px;height:7px;border-right:1.5px solid currentColor;border-bottom:1.5px solid currentColor;transform:rotate(45deg);margin:-3px 0 0 auto;transition:transform .2s;color:var(--mute)}
 details[open] summary::after{transform:rotate(-135deg);margin-top:3px}
-summary:hover{color:var(--text)}
-.steps{margin-top:10px;font-size:14px;color:var(--text)}
-.steps b{display:block;font-size:12px;letter-spacing:.06em;text-transform:uppercase;color:var(--mute);font-weight:500;margin-top:10px}
+.steps{margin-top:10px;font-size:14px}
+.steps b{display:block;font-size:12px;letter-spacing:.06em;text-transform:uppercase;color:var(--mute);font-weight:500;margin-top:12px}
 .steps b:first-child{margin-top:0}
 .steps ol{padding-inline-start:20px;margin-top:4px}
 .steps li{margin-top:3px}
 code{font-family:ui-monospace,Consolas,monospace;font-size:13px;background:var(--soft);border-radius:6px;padding:1px 5px}
+.he{font-size:.55em;color:var(--mute);margin-inline-start:8px;font-family:ui-sans-serif,system-ui,sans-serif}
 
-.foot{margin:48px 0 0;padding:20px 0 calc(32px + env(safe-area-inset-bottom,0px));border-top:1px solid var(--line);font-size:13px;color:var(--mute);display:flex;flex-wrap:wrap;gap:6px 18px;justify-content:space-between}
+.getstrip{display:none}
+.toast{position:fixed;left:50%;bottom:28px;transform:translate(-50%,20px);background:var(--text);color:var(--bg);padding:11px 18px;border-radius:12px;font-size:14px;box-shadow:var(--shadow);opacity:0;pointer-events:none;transition:opacity .2s,transform .2s;max-width:calc(100vw - 32px);z-index:20}
+.toast.show{opacity:1;transform:translate(-50%,0)}
+.foot{margin-top:48px;padding-top:18px;border-top:1px solid var(--line);font-size:13px;color:var(--mute);display:flex;flex-wrap:wrap;gap:6px 18px;justify-content:space-between}
 .foot a{text-decoration:underline;text-underline-offset:2px}
 
-@media(max-width:480px){h1{font-size:32px}.mark{width:52px;height:52px;border-radius:14px}.card{padding:18px}.btn{flex:1 1 auto}}
-@media(prefers-reduced-motion:reduce){*{transition:none!important}}
+/* ---------- tablets and phones: sidebar becomes a bottom tab bar ---------- */
+@media(max-width:900px){
+  .shell{display:block}
+  .side{position:fixed;top:auto;bottom:0;left:0;right:0;height:auto;z-index:10;flex-direction:row;padding:6px 8px calc(6px + env(safe-area-inset-bottom,0px));border-right:0;border-top:1px solid var(--line);background:color-mix(in srgb,var(--side) 92%,transparent);-webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px)}
+  .brand,.get,.ver{display:none}
+  .nav{flex-direction:row;width:100%;justify-content:space-around}
+  .nav a{flex-direction:column;gap:3px;padding:6px 4px;font-size:11px;flex:1;max-width:96px}
+  .nav a.on{box-shadow:none;background:transparent}
+  main{padding:calc(18px + env(safe-area-inset-top,0px)) 16px 104px}
+  .mtop{display:flex;align-items:center;gap:10px;margin-bottom:18px}
+  .mtop img{width:34px;height:34px;border-radius:9px}
+  .mtop b{font-family:ui-serif,Georgia,Cambria,serif;font-weight:400;font-size:20px}
+  .getstrip{display:flex;align-items:center;gap:10px;flex-wrap:wrap;background:var(--card);border:1px solid var(--line);border-radius:16px;padding:12px 14px;margin-top:16px;font-size:14px}
+  .getstrip span{flex:1 1 100%;color:var(--mute)}
+  .getstrip .btn{flex:1}
+  .toast{bottom:96px}
+}
+@media(max-width:640px){
+  .hero{grid-template-columns:1fr;min-height:0}
+  .art{order:-1;height:170px}
+  .art img{width:120px}
+  .htext{padding:22px 20px 44px}
+  .htext h2{font-size:32px}
+  .dots{left:20px;bottom:16px}
+  .grid{grid-template-columns:1fr 1fr;gap:12px}
+  .tbody{padding:12px}
+  .tbody h3{font-size:17px}
+  .tbody .btn{padding:9px 10px;font-size:14px}
+  .tsub{font-size:12px}
+  .head h1{font-size:28px}
+  .detail{grid-template-columns:1fr;gap:18px}
+  .detail .cover{aspect-ratio:16/9}
+  .detail .cover img{width:30%}
+  .dinfo h1{font-size:34px}
+  .dinfo .btns .btn{flex:1 1 auto}
+}
+@media(prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+
+/* ---------- the pale moon behind the top-right corner (luv + tsuki) ---------- */
+.shell{position:relative;z-index:1}
+.side{background:color-mix(in srgb,var(--side) 88%,transparent)}
+.moonbg{position:fixed;z-index:0;pointer-events:none;top:-140px;right:-140px;width:560px;aspect-ratio:1;border-radius:50%;opacity:.75;box-shadow:0 0 120px 30px rgba(255,255,255,.7);
+  background:
+    radial-gradient(circle at 30% 38%,rgba(120,112,98,.16) 0 7%,transparent 7.6%),
+    radial-gradient(circle at 58% 26%,rgba(120,112,98,.12) 0 4.5%,transparent 5%),
+    radial-gradient(circle at 46% 62%,rgba(120,112,98,.14) 0 10%,transparent 10.6%),
+    radial-gradient(circle at 70% 52%,rgba(120,112,98,.10) 0 5.5%,transparent 6%),
+    radial-gradient(circle at 24% 70%,rgba(120,112,98,.10) 0 3.5%,transparent 4%),
+    radial-gradient(circle at 64% 78%,rgba(120,112,98,.09) 0 4%,transparent 4.5%),
+    radial-gradient(circle at 36% 30%,#FFFFFF 0,#EFECE4 45%,#DCD8CD 100%)}
+@media(prefers-color-scheme:dark){.moonbg{opacity:.5;box-shadow:0 0 140px 40px rgba(255,248,225,.14)}}
+@media(max-width:640px){.moonbg{width:300px;top:-90px;right:-90px}}
 </style>
 </head>
 <body>
-<div class="wrap">
-
-<header>
-  <img class="mark" src="img/workspace-512.png" alt="">
-  <div>
-    <div class="kicker">Ori's projects</div>
-    <h1 class="serif">Shpigel's Workspace</h1>
-  </div>
-</header>
-<p class="sum">Apps and games I've made: two chess tools, a planner that keeps me focused, a Hebrew party game and a dark dungeon game in Python.</p>
-
-<div class="label"><span>Apps and tools</span><span>3</span></div>
-<div class="grid">
-
-  <article class="card" id="repertoire-trainer">
-    <div class="top">
-      <img class="logo" src="img/repertoire-trainer.png" alt="Repertoire Trainer logo">
-      <div>
-        <h2 class="serif">Repertoire Trainer</h2>
-        <div class="tags"><span class="chip">Website</span><span class="chip">Windows</span><span class="chip">Android</span></div>
-      </div>
+<div class="moonbg" aria-hidden="true"></div>
+<div class="shell">
+  <aside class="side">
+    <a class="brand" href="#home"><img src="img/luv-launcher-192.png" alt=""><b>Luv Launcher</b></a>
+    <nav class="nav" aria-label="Sections">
+      <a href="#home" data-v="home"><i class="ic i-home"></i>Home</a>
+      <a href="#library" data-v="library"><i class="ic i-library"></i>Library</a>
+      <a href="#apps" data-v="apps"><i class="ic i-apps"></i>Apps</a>
+      <a href="#games" data-v="games"><i class="ic i-games"></i>Games</a>
+    </nav>
+    <div class="get" id="get">
+      <div class="kicker">Get the app</div>
+      <p>Install and launch everything from one place.</p>
+      <a class="btn acc" href="https://github.com/IroTheAngel/luv-launcher/releases/latest/download/LuvLauncher-Setup.exe"><i class="ic i-dl"></i>Windows</a>
+      <a class="btn" href="https://github.com/IroTheAngel/luv-launcher/releases/latest/download/LuvLauncher.apk"><i class="ic i-dl"></i>Android</a>
     </div>
-    <p class="desc">Learn a whole chess opening repertoire with a coach that talks you through every move. Nearly 500 lines for White and Black (Catalan, Queen's Gambit, Vienna, Caro-Kann, Sicilian and more), plus puzzles, a daily streak, XP and games against the computer.</p>
-    <div class="btns">
-      <a class="btn acc" href="https://irotheangel.github.io/chess-trainer/"><i class="ic i-play"></i>Open</a>
-      <a class="btn" href="https://github.com/IroTheAngel/chess-trainer/releases/latest/download/RepertoireTrainer-Setup.exe"><i class="ic i-dl"></i>Windows <small>2 MB</small></a>
-      <a class="btn" href="https://github.com/IroTheAngel/chess-trainer/releases/latest/download/RepertoireTrainer.apk"><i class="ic i-dl"></i>Android <small>0.3 MB</small></a>
-    </div>
-    <details>
-      <summary><i class="ic i-info"></i>How to install the apps</summary>
-      <div class="steps">
-        <b>Windows</b>
-        <ol><li>Open <code>RepertoireTrainer-Setup.exe</code>. It installs itself and adds a desktop shortcut.</li><li>If Windows says it protected your PC, click <strong>More info</strong>, then <strong>Run anyway</strong>.</li></ol>
-        <b>Android</b>
-        <ol><li>Open <code>RepertoireTrainer.apk</code> on your phone.</li><li>If Android asks, let your browser install unknown apps, then tap <strong>Install</strong>.</li></ol>
-        <b>Bring your progress</b>
-        <ol><li>On the website's home page, use <strong>Back up or move progress</strong>, then load the backup in the app.</li></ol>
-      </div>
-    </details>
-  </article>
-
-  <article class="card" id="schedule-maker">
-    <div class="top">
-      <img class="logo" src="img/schedule-maker.png" alt="Schedule Maker logo">
-      <div>
-        <h2 class="serif">Schedule Maker</h2>
-        <div class="tags"><span class="chip">Android</span><span class="chip">Windows</span><span class="chip">Website</span></div>
-      </div>
-    </div>
-    <p class="desc">A daily and weekly planner. Add tasks with times, let Claude turn piano and study sessions into timed blocks, and start Focus mode with rain or wave sounds. On Android, Focus mode also blocks YouTube, TikTok and other distracting apps.</p>
-    <div class="btns">
-      <a class="btn acc" href="https://github.com/IroTheAngel/schedule-maker/releases/latest/download/ScheduleMaker.apk"><i class="ic i-dl"></i>Android <small>3.5 MB</small></a>
-      <a class="btn" href="https://github.com/IroTheAngel/schedule-maker/releases/latest/download/ScheduleMaker-Setup.exe"><i class="ic i-dl"></i>Windows <small>121 MB</small></a>
-      <a class="btn" href="https://irotheangel.github.io/schedule-maker/"><i class="ic i-play"></i>Open in browser</a>
-    </div>
-    <details>
-      <summary><i class="ic i-info"></i>How to install</summary>
-      <div class="steps">
-        <b>Android</b>
-        <ol><li>Open <code>ScheduleMaker.apk</code> on your phone. If Android asks, let your browser install unknown apps, then tap <strong>Install</strong>.</li><li>The first time you press <strong>Focus</strong>, turn on <strong>Usage access</strong> and <strong>Display over other apps</strong> for Schedule Maker, so it can block apps.</li><li>New versions install over the old one and keep your schedule.</li></ol>
-        <b>Windows</b>
-        <ol><li>Open <code>ScheduleMaker-Setup.exe</code>. If Windows says it protected your PC, click <strong>More info</strong>, then <strong>Run anyway</strong>.</li></ol>
-      </div>
-    </details>
-  </article>
-
-  <article class="card" id="free-game-review">
-    <div class="top">
-      <img class="logo flat" src="img/free-game-review.png" alt="Free Game Review logo">
-      <div>
-        <h2 class="serif">Free Game Review</h2>
-        <div class="tags"><span class="chip">Chrome extension</span><span class="chip">chess.com</span></div>
-      </div>
-    </div>
-    <p class="desc">Review your finished chess.com games as often as you like, for free. Stockfish 18 runs in your own browser and rates every move from Brilliant to Blunder, with accuracy, an evaluation graph, a coach that explains each move, and a mode to practise your mistakes.</p>
-    <div class="btns">
-      <a class="btn acc" href="https://github.com/IroTheAngel/free-game-review/archive/refs/heads/main.zip"><i class="ic i-dl"></i>Download ZIP <small>6 MB</small></a>
-      <a class="btn" href="https://github.com/IroTheAngel/free-game-review"><i class="ic i-code"></i>GitHub</a>
-    </div>
-    <details>
-      <summary><i class="ic i-info"></i>How to install</summary>
-      <div class="steps">
-        <ol><li>Unzip the download somewhere you'll keep it, like Documents. Chrome runs the extension from that folder, so don't delete it.</li><li>In Chrome, open <code>chrome://extensions</code> and turn on <strong>Developer mode</strong> (top right).</li><li>Click <strong>Load unpacked</strong> and pick the unzipped folder (the one with <code>manifest.json</code> in it).</li><li>Pin it from the puzzle-piece menu, then click <strong>Free Review</strong> when a game ends on chess.com.</li></ol>
-      </div>
-    </details>
-  </article>
-
+    <div class="ver" id="ver" hidden></div>
+  </aside>
+  <main>
+    <div class="mtop"><img src="img/luv-launcher-192.png" alt=""><b>Luv Launcher</b></div>
+    <div id="view"></div>
+  </main>
 </div>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
 
-<div class="label"><span>Games</span><span>2</span></div>
-<div class="grid">
+<script>
+"use strict";
+const GH = "https://github.com/IroTheAngel/";
+const HOST = (window.chrome && window.chrome.webview) ? "win" : (window.LuvAndroid ? "android" : "web");
+const UA_ANDROID = /Android/i.test(navigator.userAgent);
+const UA_WINDOWS = /Windows/i.test(navigator.userAgent);
 
-  <article class="card" id="eretz-ir">
-    <div class="top">
-      <img class="logo" src="img/eretz-ir.png" alt="Eretz Ir logo">
-      <div>
-        <h2 class="serif">Eretz Ir <span class="he" lang="he" dir="rtl">ארץ עיר</span></h2>
-        <div class="tags"><span class="chip">Website</span><span class="chip">Android</span><span class="chip">Hebrew</span></div>
-      </div>
+const ANDROID_STEP = "If Android asks, let your browser install unknown apps, then tap <strong>Install</strong>.";
+const WIN_STEP = "If Windows says it protected your PC, click <strong>More info</strong>, then <strong>Run anyway</strong>.";
+
+const APPS = [
+  { id: "trainer", name: "Repertoire Trainer", kind: "app", topic: "Chess openings", logo: "img/repertoire-trainer.png", art: "#81B64C",
+    tags: ["Website", "Windows", "Android"],
+    short: "Learn chess openings with a coach that talks you through every move.",
+    desc: "Learn a whole chess opening repertoire with a coach that talks you through every move. Nearly 500 lines for White and Black (Catalan, Queen's Gambit, Vienna, Caro-Kann, Sicilian and more), plus puzzles, a daily streak, XP and games against the computer.",
+    web: { url: "https://irotheangel.github.io/chess-trainer/", label: "Open" },
+    win: { url: GH + "chess-trainer/releases/latest/download/RepertoireTrainer-Setup.exe", size: "2 MB" },
+    android: { url: GH + "chess-trainer/releases/latest/download/RepertoireTrainer.apk", size: "0.3 MB" },
+    steps: [["Windows", ["Open <code>RepertoireTrainer-Setup.exe</code>. It installs itself and adds a desktop shortcut.", WIN_STEP]],
+            ["Android", ["Open <code>RepertoireTrainer.apk</code> on your phone.", ANDROID_STEP]],
+            ["Bring your progress", ["On the website's home page, use <strong>Back up or move progress</strong>, then load the backup in the app."]]] },
+  { id: "schedule", name: "Schedule Maker", kind: "app", topic: "Planner", logo: "img/schedule-maker.png", art: "#D0805F",
+    tags: ["Android", "Windows", "Website"],
+    short: "A daily planner with timed blocks and a Focus mode that blocks distractions.",
+    desc: "A daily and weekly planner. Add tasks with times, let Claude turn piano and study sessions into timed blocks, and start Focus mode with rain or wave sounds. On Android, Focus mode also blocks YouTube, TikTok and other distracting apps.",
+    web: { url: "https://irotheangel.github.io/schedule-maker/", label: "Open in browser" },
+    win: { url: GH + "schedule-maker/releases/latest/download/ScheduleMaker-Setup.exe", size: "121 MB" },
+    android: { url: GH + "schedule-maker/releases/latest/download/ScheduleMaker.apk", size: "3.5 MB" },
+    steps: [["Android", ["Open <code>ScheduleMaker.apk</code> on your phone. " + ANDROID_STEP, "The first time you press <strong>Focus</strong>, turn on <strong>Usage access</strong> and <strong>Display over other apps</strong> for Schedule Maker, so it can block apps.", "New versions install over the old one and keep your schedule."]],
+            ["Windows", ["Open <code>ScheduleMaker-Setup.exe</code>. " + WIN_STEP]]] },
+  { id: "review", name: "Free Game Review", kind: "app", topic: "Chess extension", logo: "img/free-game-review.png", art: "#DCEEFF",
+    tags: ["Chrome extension", "chess.com"],
+    short: "Review your finished chess.com games for free, as often as you like.",
+    desc: "Review your finished chess.com games as often as you like, for free. Stockfish 18 runs in your own browser and rates every move from Brilliant to Blunder, with accuracy, an evaluation graph, a coach that explains each move, and a mode to practise your mistakes.",
+    zip: { url: GH + "free-game-review/archive/refs/heads/main.zip", size: "6 MB" },
+    repo: GH + "free-game-review",
+    steps: [["In Chrome on a PC", ["Unzip the download somewhere you'll keep it, like Documents. Chrome runs the extension from that folder, so don't delete it.", "In Chrome, open <code>chrome://extensions</code> and turn on <strong>Developer mode</strong> (top right).", "Click <strong>Load unpacked</strong> and pick the unzipped folder (the one with <code>manifest.json</code> in it).", "Pin it from the puzzle-piece menu, then click <strong>Free Review</strong> when a game ends on chess.com."]]],
+    winSteps: [["Load it in Chrome", ["Luv Launcher opened the extension's folder and Chrome's extensions page for you.", "In Chrome, turn on <strong>Developer mode</strong> (top right).", "Click <strong>Load unpacked</strong> and pick the folder Luv Launcher opened (the one with <code>manifest.json</code> in it).", "Pin it from the puzzle-piece menu, then click <strong>Free Review</strong> when a game ends on chess.com."]]] },
+  { id: "eretz", name: "Eretz Ir", he: "ארץ עיר", kind: "game", topic: "Party game", logo: "img/eretz-ir.png", art: "#1B2B45",
+    tags: ["Website", "Android", "Hebrew"],
+    short: "Spin for a letter and race to fill in every category.",
+    desc: "A helper for the classic Hebrew categories game. Spin the wheel for a random letter, then everyone writes a country, a city, an animal and more that start with it. It has a turn timer, a dictionary with hints when you're stuck, and a score table for the week.",
+    web: { url: "https://irotheangel.github.io/eretz-ir-game/eretz-ir-letter-spinner.html", label: "Play" },
+    android: { url: GH + "eretz-ir-game/releases/latest/download/EretzIr.apk", size: "1 MB" },
+    steps: [["Android", ["Open <code>EretzIr.apk</code> on your phone. " + ANDROID_STEP, "The app opens inside Chrome, so Chrome needs to be installed."]]] },
+  { id: "pulse", name: "PULSE", kind: "game", topic: "Dungeon game", logo: "img/pulse.png", art: "#120D08",
+    tags: ["PC", "Python", "Pygame"],
+    short: "See only by sending out pulses, and don't let them hear you.",
+    desc: "A dark dungeon game where you can only see by sending out pulses that light up the walls. Every pulse drains your battery and makes noise that enemies can hear. Open chests, go down 8 floors and beat The Manager. It also has an AI that learns to play the game by itself.",
+    pcOnly: true }
+];
+const byId = Object.fromEntries(APPS.map(a => [a.id, a]));
+
+// ---------- talking to the Windows or Android app ----------
+const st = {};          // id -> { installed, available, busy, pct, msg }
+function send(cmd, id) {
+  if (HOST === "win") window.chrome.webview.postMessage({ cmd: cmd, id: id || "" });
+  else if (HOST === "android") { try { window.LuvAndroid[cmd](id || ""); } catch (e) { toast("That didn't work: " + e.message); } }
+}
+function refresh() {
+  if (HOST === "android") { try { onHost(JSON.parse(window.LuvAndroid.state())); } catch (e) {} }
+  else if (HOST === "win") send("state");
+}
+function onHost(m) {
+  if (typeof m === "string") { try { m = JSON.parse(m); } catch (e) { return; } }
+  if (!m || !m.type) return;
+  if (m.type === "state") {
+    for (const id in m.apps) st[id] = Object.assign({}, st[id], m.apps[id]);
+    if (m.version) { const v = document.getElementById("ver"); v.textContent = "Luv Launcher " + m.version; v.hidden = false; }
+    render();
+  } else if (m.type === "progress") {
+    st[m.id] = Object.assign({}, st[m.id], { busy: true, pct: m.pct, msg: m.msg });
+    paintBusy(m.id);
+  } else if (m.type === "done") {
+    st[m.id] = Object.assign({}, st[m.id], { busy: false, pct: null });
+    if (m.msg) toast(m.msg);
+    if (m.open && location.hash !== "#app/" + m.id) location.hash = "#app/" + m.id;
+    refresh(); render();
+  }
+}
+window.luvEvent = onHost;   // the Android app calls these
+window.luvRefresh = refresh;
+if (HOST === "win") window.chrome.webview.addEventListener("message", e => onHost(e.data));
+
+// ---------- what each button does here ----------
+// one action = { label, icon, small, primary, href, run, disabled, busy }
+function actions(a) {
+  const s = st[a.id] || {};
+  const out = [];
+  if (s.busy) return [{ busy: true, label: s.msg || "Working…", pct: s.pct, primary: true }];
+  if (HOST === "win") {
+    if (a.win) {
+      out.push(s.installed ? { label: "Launch", icon: "play", primary: true, run: "launch" }
+                           : { label: "Install", icon: "dl", small: a.win.size, primary: true, run: "install" });
+      if (a.web) out.push({ label: "Web version", icon: "play", run: "play" });
+    } else if (a.zip) {
+      out.push(s.installed ? { label: "Set up in Chrome", icon: "play", primary: true, run: "launch" }
+                           : { label: "Install", icon: "dl", small: a.zip.size, primary: true, run: "install" });
+      out.push({ label: "GitHub", icon: "code", href: a.repo });
+    } else if (a.web) out.push({ label: a.web.label, icon: "play", primary: true, run: "play" });
+    else if (a.pcOnly) out.push(s.available ? { label: "Launch", icon: "play", primary: true, run: "launch" }
+                                             : { label: "Not on this PC", disabled: true, primary: true });
+    return out;
+  }
+  if (HOST === "android") {
+    if (a.android) {
+      out.push(s.installed ? { label: "Launch", icon: "play", primary: true, run: "launch" }
+                           : { label: "Install", icon: "dl", small: a.android.size, primary: true, run: "install" });
+      if (a.web) out.push({ label: a.id === "eretz" ? "Play in browser" : "Web version", icon: "play", run: "play" });
+    } else if (a.zip) {
+      out.push({ label: "Needs Chrome on a PC", disabled: true, primary: true });
+      out.push({ label: "GitHub", icon: "code", href: a.repo });
+    } else out.push({ label: "PC only", disabled: true, primary: true });
+    return out;
+  }
+  // website: the main button suits the device
+  if (a.pcOnly) return [{ label: "Lives on Ori's PC", disabled: true, primary: true }];
+  if (a.zip) return [{ label: "Download ZIP", icon: "dl", small: a.zip.size, primary: true, href: a.zip.url }, { label: "GitHub", icon: "code", href: a.repo }];
+  const web = a.web && { label: a.web.label, icon: "play", href: a.web.url };
+  const win = a.win && { label: "Windows", icon: "dl", small: a.win.size, href: a.win.url };
+  const and = a.android && { label: "Android", icon: "dl", small: a.android.size, href: a.android.url };
+  let order;
+  if (a.id === "schedule") order = UA_WINDOWS ? [win, and, web] : [and, win, web];
+  else if (UA_ANDROID) order = [and, web, win];
+  else order = [web, win, and];
+  order = order.filter(Boolean);
+  order[0].primary = true;
+  return order;
+}
+
+function btn(x, id) {
+  if (x.busy) return `<button class="btn busy" disabled data-busy="${id}"><span class="t">${x.label}</span><span class="bar" style="width:${x.pct || 0}%"></span></button>`;
+  const cls = "btn" + (x.primary ? " acc" : "");
+  const inner = (x.icon ? `<i class="ic i-${x.icon}"></i>` : "") + x.label + (x.small ? ` <small>${x.small}</small>` : "");
+  if (x.disabled) return `<button class="btn" disabled>${inner}</button>`;
+  if (x.href) return `<a class="${cls}" href="${x.href}">${inner}</a>`;
+  return `<button class="${cls}" data-run="${x.run}" data-id="${id}">${inner}</button>`;
+}
+
+function paintBusy(id) {
+  const s = st[id] || {};
+  const bs = document.querySelectorAll(`[data-busy="${id}"]`);
+  if (!bs.length) { render(); return; }
+  bs.forEach(b => {
+    b.querySelector(".t").textContent = s.msg || "Working…";
+    b.querySelector(".bar").style.width = (s.pct || 0) + "%";
+  });
+}
+
+// ---------- views ----------
+function tile(a) {
+  const s = st[a.id] || {};
+  const first = actions(a)[0];
+  const have = HOST !== "web" && (s.installed || (a.pcOnly && s.available));
+  const badge = have ? `<span class="badge"><i class="ic i-check"></i>${a.pcOnly ? "On this PC" : "Installed"}</span>` : "";
+  return `<article class="tile">
+    <a class="cover" href="#app/${a.id}" style="--bg-art:${a.art}" aria-label="${a.name} details"><img src="${a.logo}" alt="">${badge}</a>
+    <div class="tbody">
+      <h3 class="serif"><a href="#app/${a.id}">${a.name}</a></h3>
+      <div class="tsub">${a.topic} · ${a.kind === "game" ? "Game" : "App"}</div>
+      <div class="spacer"></div>
+      ${btn(Object.assign({}, first, { small: null }), a.id)}
     </div>
-    <p class="desc">A helper for the classic Hebrew categories game. Spin the wheel for a random letter, then everyone writes a country, a city, an animal and more that start with it. It has a turn timer, a dictionary with hints when you're stuck, and a score table for the week.</p>
-    <div class="btns">
-      <a class="btn acc" href="https://irotheangel.github.io/eretz-ir-game/eretz-ir-letter-spinner.html"><i class="ic i-play"></i>Play</a>
-      <a class="btn" href="https://github.com/IroTheAngel/eretz-ir-game/releases/latest/download/EretzIr.apk"><i class="ic i-dl"></i>Android <small>1 MB</small></a>
+  </article>`;
+}
+function grid(list) { return list.length ? `<div class="grid">${list.map(tile).join("")}</div>` : `<p class="empty">Nothing here yet.</p>`; }
+function head(title, n, big) { return `<div class="head">${big ? `<h1 class="serif">${title}</h1>` : `<div class="kicker">${title}</div>`}<span class="kicker">${n}</span></div>`; }
+
+let slide = 0, timer = null, heroHover = false;
+function hero() {
+  const a = APPS[slide];
+  const acts = actions(a).slice(0, 1).map(x => btn(x, a.id)).join("") + `<a class="btn" href="#app/${a.id}"><i class="ic i-info"></i>Details</a>`;
+  return `<section class="hero" aria-roledescription="carousel" aria-label="Featured">
+    <div class="htext"><div class="kicker">Featured ${a.kind === "game" ? "game" : "app"}</div><h2 class="serif">${a.name}</h2><p>${a.short}</p><div class="btns">${acts}</div></div>
+    <div class="art" style="--bg-art:${a.art}"><img src="${a.logo}" alt="${a.name} logo"></div>
+    <div class="dots">${APPS.map((x, i) => `<button class="${i === slide ? "on" : ""}" data-slide="${i}" aria-label="Show ${x.name}"></button>`).join("")}</div>
+  </section>`;
+}
+function getStrip() {
+  if (HOST !== "web") return "";
+  return `<div class="getstrip"><span>Get Luv Launcher to install and launch everything from one place.</span>
+    <a class="btn acc" href="${GH}luv-launcher/releases/latest/download/LuvLauncher.apk"><i class="ic i-dl"></i>Android</a>
+    <a class="btn" href="${GH}luv-launcher/releases/latest/download/LuvLauncher-Setup.exe"><i class="ic i-dl"></i>Windows</a></div>`;
+}
+function foot() {
+  return `<footer class="foot"><span>Made by Ori with Claude.</span><span><a href="${GH}">GitHub</a> · Icons from Free Icon Pack v3.1 by @gvesster</span></footer>`;
+}
+
+function stepsHtml(a) {
+  let groups = a.steps;
+  if (HOST === "win") groups = a.winSteps || null;
+  if (HOST === "android") groups = a.android ? [["Installing", ["The first time, Android asks to let Luv Launcher install apps. Turn it on, go back, then tap <strong>Install</strong>."]]] : null;
+  if (!groups) return "";
+  const open = HOST === "win" && a.id === "review" && (st.review || {}).installed ? " open" : "";
+  return `<details${open}><summary><i class="ic i-info"></i>${HOST === "web" ? "How to install" : "Good to know"}</summary><div class="steps">${groups.map(g => `<b>${g[0]}</b><ol>${g[1].map(x => `<li>${x}</li>`).join("")}</ol>`).join("")}</div></details>`;
+}
+function statusLine(a) {
+  const s = st[a.id] || {};
+  if (HOST === "web") return a.pcOnly ? `<div class="status"><i class="ic i-info"></i>Lives on Ori's PC for now, so there's no download yet.</div>` : "";
+  if (a.pcOnly) return s.available ? `<div class="status ok"><i class="ic i-check"></i>Found on this PC.</div>` : `<div class="status"><i class="ic i-info"></i>PULSE lives on Ori's PC, so there's nothing to install yet.</div>`;
+  if (HOST === "win" && !a.win && !a.zip) return `<div class="status"><i class="ic i-info"></i>Plays inside Luv Launcher. Nothing to install.</div>`;
+  if (HOST === "android" && !a.android) return `<div class="status"><i class="ic i-info"></i>${a.zip ? "Chrome extensions only work on a PC." : "This one is PC only."}</div>`;
+  return s.installed ? `<div class="status ok"><i class="ic i-check"></i>Installed on this ${HOST === "win" ? "PC" : "phone"}.</div>` : `<div class="status">Not installed yet.</div>`;
+}
+let lastList = "home";
+function detail(a) {
+  const from = lastList;
+  return `<a class="back" href="#${from}">${from[0].toUpperCase() + from.slice(1)}</a>
+  <div class="detail">
+    <div class="cover" style="--bg-art:${a.art}"><img src="${a.logo}" alt="${a.name} logo"></div>
+    <div class="dinfo">
+      <div class="kicker">${a.topic} · ${a.kind === "game" ? "Game" : "App"}</div>
+      <h1 class="serif">${a.name}${a.he ? `<span class="he" lang="he" dir="rtl">${a.he}</span>` : ""}</h1>
+      <div class="tags">${a.tags.map(t => `<span class="chip">${t}</span>`).join("")}</div>
+      <p class="desc">${a.desc}</p>
+      <div class="btns">${actions(a).map(x => btn(x, a.id)).join("")}</div>
+      ${statusLine(a)}
+      ${stepsHtml(a)}
     </div>
-    <details>
-      <summary><i class="ic i-info"></i>How to install on Android</summary>
-      <div class="steps">
-        <ol><li>Open <code>EretzIr.apk</code> on your phone. If Android asks, let your browser install unknown apps, then tap <strong>Install</strong>.</li><li>The app opens inside Chrome, so Chrome needs to be installed.</li></ol>
-      </div>
-    </details>
-  </article>
+  </div>`;
+}
 
-  <article class="card" id="pulse">
-    <div class="top">
-      <img class="logo" src="img/pulse.png" alt="PULSE logo: a hooded figure inside glowing rings">
-      <div>
-        <h2 class="serif">PULSE</h2>
-        <div class="tags"><span class="chip">PC</span><span class="chip">Python</span><span class="chip">Pygame</span></div>
-      </div>
-    </div>
-    <p class="desc">A dark dungeon game where you can only see by sending out pulses that light up the walls. Every pulse drains your battery and makes noise that enemies can hear. Open chests, go down 8 floors and beat The Manager. It also has an AI that learns to play the game by itself.</p>
-    <p class="note"><i class="ic i-info"></i>Lives on my PC for now, so there's no download yet.</p>
-  </article>
+let lastShown = null;
+function route() { return (location.hash || "#home").slice(1); }
+function render() {
+  const r = route(), v = document.getElementById("view");
+  let html = "", nav = r;
+  const app = r.startsWith("app/") ? byId[r.slice(4)] : null;
+  if (app) { html = detail(app); nav = lastList; document.title = app.name + " · Luv Launcher"; }
+  else {
+    document.title = "Luv Launcher";
+    if (r === "library") {
+      if (HOST === "web") html = head("Library", APPS.length, true) + grid(APPS);
+      else {
+        // ready = installed, found on this PC, or (on Windows) a web game that plays inside the launcher
+        const ready = a => { const s = st[a.id] || {}; return s.installed || (a.pcOnly && s.available) || (HOST === "win" && a.web && !a.win && !a.zip); };
+        const have = APPS.filter(ready), rest = APPS.filter(a => !ready(a));
+        html = head("Library", APPS.length, true) + head("Ready to launch", have.length) + grid(have) + head("Get more", rest.length) + grid(rest);
+      }
+    } else if (r === "apps") html = head("Apps", 3, true) + grid(APPS.filter(a => a.kind === "app"));
+    else if (r === "games") html = head("Games", 2, true) + grid(APPS.filter(a => a.kind === "game"));
+    else { nav = "home"; html = hero() + getStrip() + head("Everything I've made", APPS.length) + grid(APPS); }
+    lastList = nav;
+    html += foot();
+  }
+  // fade in only when the page changes, not when the app sends fresh install status
+  v.innerHTML = `<div class="view${r !== lastShown ? " anim" : ""}">${html}</div>`;
+  lastShown = r;
+  document.querySelectorAll(".nav a").forEach(n => n.classList.toggle("on", n.dataset.v === nav));
+  startTimer();
+}
 
-</div>
+function startTimer() {
+  clearInterval(timer);
+  if (!document.querySelector(".hero") || matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+  timer = setInterval(() => { if (!document.hidden && !heroHover) showSlide((slide + 1) % APPS.length); }, 7000);
+}
+function showSlide(i) {
+  slide = i;
+  const h = document.querySelector(".hero");
+  if (!h) return;
+  const tmp = document.createElement("div");
+  tmp.innerHTML = hero();
+  h.replaceWith(tmp.firstElementChild);
+}
 
-<footer class="foot">
-  <span>Made by Ori with Claude.</span>
-  <span><a href="https://github.com/IroTheAngel">GitHub</a> · Icons from Free Icon Pack v3.1 by @gvesster</span>
-</footer>
+let toastT;
+function toast(msg) {
+  const t = document.getElementById("toast");
+  t.textContent = msg; t.classList.add("show");
+  clearTimeout(toastT); toastT = setTimeout(() => t.classList.remove("show"), 3600);
+}
 
-</div>
+document.addEventListener("click", e => {
+  const d = e.target.closest("[data-slide]");
+  if (d) { showSlide(+d.dataset.slide); startTimer(); return; }
+  const b = e.target.closest("[data-run]");
+  if (b && !b.disabled) {
+    const id = b.dataset.id, run = b.dataset.run;
+    if (run === "install") { st[id] = Object.assign({}, st[id], { busy: true, pct: 0, msg: "Starting…" }); render(); }
+    send(run, id);
+  }
+});
+document.addEventListener("mouseover", e => { heroHover = !!e.target.closest(".hero"); });
+window.addEventListener("hashchange", () => { render(); window.scrollTo(0, 0); });
+document.addEventListener("visibilitychange", () => { if (!document.hidden) refresh(); });
+if (HOST !== "web") document.getElementById("get").style.display = "none";
+render();
+refresh();
+</script>
 </body>
 </html>
