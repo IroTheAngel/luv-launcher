@@ -12,12 +12,23 @@
 <meta property="og:image" content="https://irotheangel.github.io/luv-launcher/img/luv-launcher-512.png">
 <meta name="theme-color" content="#F4F3EE" media="(prefers-color-scheme: light)">
 <meta name="theme-color" content="#161615" media="(prefers-color-scheme: dark)">
+<script>
+// apply the saved Light/Dark choice before the page draws, so it never flashes the wrong colours
+try {
+  var luvT = localStorage.getItem("luv_theme");
+  if (luvT === "dark" || luvT === "light") document.documentElement.setAttribute("data-theme", luvT);
+  else if (window.LuvAndroid && LuvAndroid.systemDark && LuvAndroid.systemDark()) document.documentElement.setAttribute("data-theme", "dark");
+} catch (e) {}
+</script>
 <link rel="icon" type="image/png" href="favicon.png">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
 <style>
 /* Colours, type and shapes from Schedule Maker; launcher layout (sidebar, featured banner, library tiles) */
 :root{color-scheme:light dark;--bg:#F4F3EE;--side:#ECEAE3;--card:#FFFFFF;--line:#E4E1D8;--text:#1F1E1D;--mute:#6F6D66;--acc:#C15F3C;--soft:#EBE9E1;--tint:#F7EBE5;--green:#5E8466;--shadow:0 1px 2px rgba(31,30,29,.05),0 6px 20px rgba(31,30,29,.06)}
-@media(prefers-color-scheme:dark){:root{--bg:#161615;--side:#1C1C1B;--card:#20201E;--line:#33332F;--text:#F0EFEA;--mute:#9C9A94;--acc:#D97757;--soft:#2C2C2A;--tint:#33251F;--green:#8DB596;--shadow:0 6px 20px rgba(0,0,0,.35)}}
+/* dark: when picked with the Light/Dark switch, or when the device is dark and nothing was picked */
+:root[data-theme="light"]{color-scheme:light}
+:root[data-theme="dark"]{color-scheme:dark;--bg:#161615;--side:#1C1C1B;--card:#20201E;--line:#33332F;--text:#F0EFEA;--mute:#9C9A94;--acc:#D97757;--soft:#2C2C2A;--tint:#33251F;--green:#8DB596;--shadow:0 6px 20px rgba(0,0,0,.35)}
+@media(prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#161615;--side:#1C1C1B;--card:#20201E;--line:#33332F;--text:#F0EFEA;--mute:#9C9A94;--acc:#D97757;--soft:#2C2C2A;--tint:#33251F;--green:#8DB596;--shadow:0 6px 20px rgba(0,0,0,.35)}}
 *{box-sizing:border-box;margin:0;padding:0}
 html{-webkit-text-size-adjust:100%}
 body{font-family:ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;background:var(--bg);color:var(--text);min-height:100vh;line-height:1.5;-webkit-font-smoothing:antialiased;-webkit-tap-highlight-color:transparent}
@@ -41,10 +52,18 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
 .nav a:hover{background:var(--soft);color:var(--text)}
 .nav a.on{background:var(--card);color:var(--text);box-shadow:0 1px 3px rgba(0,0,0,.1)}
 .nav a.on .ic{color:var(--acc)}
-.get{margin-top:auto;background:var(--card);border:1px solid var(--line);border-radius:16px;padding:14px}
+.seg{display:grid;grid-auto-flow:column;grid-auto-columns:1fr;background:var(--soft);border-radius:12px;padding:4px;gap:2px}
+.seg button{padding:7px 10px;border-radius:9px;font-size:13px;font-weight:500;color:var(--mute);display:flex;align-items:center;justify-content:center;gap:6px}
+.seg button.on{background:var(--card);color:var(--text);box-shadow:0 1px 3px rgba(0,0,0,.12)}
+.seg button:focus-visible{outline:2px solid var(--acc);outline-offset:1px}
+.seg .sun,.seg .moon{width:12px;height:12px;border-radius:50%;flex-shrink:0}
+.seg .sun{width:9px;height:9px;background:currentColor;box-shadow:0 0 0 2.5px color-mix(in srgb,currentColor 25%,transparent)}
+.seg .moon{box-shadow:inset 4px -3px 0 0 currentColor;transform:rotate(-20deg)}
+.side .seg{margin-top:auto}
+.get{margin-top:12px;background:var(--card);border:1px solid var(--line);border-radius:16px;padding:14px}
 .get p{font-size:13px;color:var(--mute);margin:4px 0 10px}
 .get .btn{width:100%;margin-top:6px;justify-content:flex-start}
-.ver{margin-top:auto;padding:0 10px;font-size:12px;color:var(--mute)}
+.ver{margin-top:12px;padding:0 10px;font-size:12px;color:var(--mute)}
 main{padding:32px 36px 48px;min-width:0}
 .view{max-width:1120px;margin:0 auto}
 .view.anim{animation:fade .25s ease}
@@ -132,7 +151,8 @@ code{font-family:ui-monospace,Consolas,monospace;font-size:13px;background:var(-
 @media(max-width:900px){
   .shell{display:block}
   .side{position:fixed;top:auto;bottom:0;left:0;right:0;height:auto;z-index:10;flex-direction:row;padding:6px 8px calc(6px + env(safe-area-inset-bottom,0px));border-right:0;border-top:1px solid var(--line);background:color-mix(in srgb,var(--side) 92%,transparent);-webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px)}
-  .brand,.get,.ver{display:none}
+  .brand,.get,.ver,.side .seg{display:none}
+  .mtop .seg{margin-left:auto}
   .nav{flex-direction:row;width:100%;justify-content:space-around}
   .nav a{flex-direction:column;gap:3px;padding:6px 4px;font-size:11px;flex:1;max-width:96px}
   .nav a.on{box-shadow:none;background:transparent}
@@ -178,7 +198,8 @@ code{font-family:ui-monospace,Consolas,monospace;font-size:13px;background:var(-
     radial-gradient(circle at 24% 70%,rgba(120,112,98,.10) 0 3.5%,transparent 4%),
     radial-gradient(circle at 64% 78%,rgba(120,112,98,.09) 0 4%,transparent 4.5%),
     radial-gradient(circle at 36% 30%,#FFFFFF 0,#EFECE4 45%,#DCD8CD 100%)}
-@media(prefers-color-scheme:dark){.moonbg{opacity:.5;box-shadow:0 0 140px 40px rgba(255,248,225,.14)}}
+:root[data-theme="dark"] .moonbg{opacity:.5;box-shadow:0 0 140px 40px rgba(255,248,225,.14)}
+@media(prefers-color-scheme:dark){:root:not([data-theme="light"]) .moonbg{opacity:.5;box-shadow:0 0 140px 40px rgba(255,248,225,.14)}}
 @media(max-width:640px){.moonbg{width:300px;top:-90px;right:-90px}}
 </style>
 </head>
@@ -193,6 +214,7 @@ code{font-family:ui-monospace,Consolas,monospace;font-size:13px;background:var(-
       <a href="#apps" data-v="apps"><i class="ic i-apps"></i>Apps</a>
       <a href="#games" data-v="games"><i class="ic i-games"></i>Games</a>
     </nav>
+    <div class="seg" role="group" aria-label="Colour theme"><button data-theme-set="light"><i class="sun"></i>Light</button><button data-theme-set="dark"><i class="moon"></i>Dark</button></div>
     <div class="get" id="get">
       <div class="kicker">Get the app</div>
       <p>Install and launch everything from one place.</p>
@@ -202,7 +224,8 @@ code{font-family:ui-monospace,Consolas,monospace;font-size:13px;background:var(-
     <div class="ver" id="ver" hidden></div>
   </aside>
   <main>
-    <div class="mtop"><img src="img/luv-launcher-192.png" alt=""><b>Luv Launcher</b></div>
+    <div class="mtop"><img src="img/luv-launcher-192.png" alt=""><b>Luv Launcher</b>
+      <div class="seg" role="group" aria-label="Colour theme"><button data-theme-set="light"><i class="sun"></i>Light</button><button data-theme-set="dark"><i class="moon"></i>Dark</button></div></div>
     <div id="view"></div>
   </main>
 </div>
@@ -481,7 +504,27 @@ function toast(msg) {
   clearTimeout(toastT); toastT = setTimeout(() => t.classList.remove("show"), 3600);
 }
 
+// ---------- Light / Dark ----------
+const darkQuery = matchMedia("(prefers-color-scheme: dark)");
+function theme() { return document.documentElement.getAttribute("data-theme") || (darkQuery.matches ? "dark" : "light"); }
+function setTheme(t) {
+  document.documentElement.setAttribute("data-theme", t);
+  try { localStorage.setItem("luv_theme", t); } catch (e) {}
+  paintTheme();
+}
+function paintTheme() {
+  const t = theme();
+  document.querySelectorAll("[data-theme-set]").forEach(b => { b.classList.toggle("on", b.dataset.themeSet === t); b.setAttribute("aria-pressed", b.dataset.themeSet === t); });
+  document.querySelectorAll('meta[name="theme-color"]').forEach(m => m.setAttribute("content", t === "dark" ? "#161615" : "#F4F3EE"));
+  // the apps colour their own window edges (title bar, status bar) to match
+  if (HOST === "win") window.chrome.webview.postMessage({ cmd: "theme", id: t });
+  else if (HOST === "android" && window.LuvAndroid.setTheme) { try { window.LuvAndroid.setTheme(t); } catch (e) {} }
+}
+darkQuery.addEventListener("change", paintTheme);
+
 document.addEventListener("click", e => {
+  const th = e.target.closest("[data-theme-set]");
+  if (th) { setTheme(th.dataset.themeSet); return; }
   const d = e.target.closest("[data-slide]");
   if (d) { showSlide(+d.dataset.slide); startTimer(); return; }
   const b = e.target.closest("[data-run]");
@@ -496,6 +539,7 @@ window.addEventListener("hashchange", () => { render(); window.scrollTo(0, 0); }
 document.addEventListener("visibilitychange", () => { if (!document.hidden) refresh(); });
 if (HOST !== "web") document.getElementById("get").style.display = "none";
 render();
+paintTheme();
 refresh();
 </script>
 </body>
