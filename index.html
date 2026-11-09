@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>Luv Launcher</title>
-<meta name="description" content="Luv Launcher: open, install and launch everything Ori has made. A chess opening trainer, a planner, a chess.com review extension, a Hebrew party game and a Python dungeon game.">
+<meta name="description" content="Luv Launcher: open, install and launch everything Ori has made. A chess opening trainer, a planner, a packing list, a chess.com review extension, a Hebrew party game and a Python dungeon game.">
 <meta property="og:title" content="Luv Launcher">
 <meta property="og:description" content="Open, install and launch everything Ori has made.">
 <meta property="og:type" content="website">
@@ -261,6 +261,13 @@ const APPS = [
     android: { url: GH + "schedule-maker/releases/latest/download/ScheduleMaker.apk", size: "3.5 MB" },
     steps: [["Android", ["Open <code>ScheduleMaker.apk</code> on your phone. " + ANDROID_STEP, "The first time you press <strong>Focus</strong>, turn on <strong>Usage access</strong> and <strong>Display over other apps</strong> for Schedule Maker, so it can block apps.", "New versions install over the old one and keep your schedule."]],
             ["Windows", ["Open <code>ScheduleMaker-Setup.exe</code>. " + WIN_STEP]]] },
+  { id: "packcheck", name: "Pack Check", kind: "app", topic: "Packing lists", logo: "img/pack-check.png", art: "#E8D6C4",
+    tags: ["Android", "Website"],
+    short: "List what you bring, then tick it off when you pack to go home.",
+    desc: "Going to a sleepover or a trip? Make a list of everything you bring, with quick ideas like charger, toothbrush and pajamas. When it's time to go home, tick each thing as it goes back in your bag, and Pack Check shows what's still missing. Use the same list again next time.",
+    web: { url: "https://irotheangel.github.io/pack-check/", label: "Open" },
+    android: { url: GH + "pack-check/releases/latest/download/PackCheck.apk", size: "0.2 MB" },
+    steps: [["Android", ["Open <code>PackCheck.apk</code> on your phone. " + ANDROID_STEP, "Your lists stay on your phone and work without internet."]]] },
   { id: "review", name: "Free Game Review", kind: "app", topic: "Chess extension", logo: "img/free-game-review.png", art: "#DCEEFF",
     tags: ["Chrome extension", "chess.com"],
     short: "Review your finished chess.com games for free, as often as you like.",
@@ -470,8 +477,8 @@ function render() {
         const have = APPS.filter(ready), rest = APPS.filter(a => !ready(a));
         html = head("Library", APPS.length, true) + head("Ready to launch", have.length) + grid(have) + head("Get more", rest.length) + grid(rest);
       }
-    } else if (r === "apps") html = head("Apps", 3, true) + grid(APPS.filter(a => a.kind === "app"));
-    else if (r === "games") html = head("Games", 2, true) + grid(APPS.filter(a => a.kind === "game"));
+    } else if (r === "apps") { const l = APPS.filter(a => a.kind === "app"); html = head("Apps", l.length, true) + grid(l); }
+    else if (r === "games") { const l = APPS.filter(a => a.kind === "game"); html = head("Games", l.length, true) + grid(l); }
     else { nav = "home"; html = hero() + getStrip() + head("Everything I've made", APPS.length) + grid(APPS); }
     lastList = nav;
     html += foot();
