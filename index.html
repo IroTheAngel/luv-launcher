@@ -282,6 +282,14 @@ const APPS = [
     repo: GH + "free-game-review",
     steps: [["In Chrome on a PC", ["Unzip the download somewhere you'll keep it, like Documents. Chrome runs the extension from that folder, so don't delete it.", "In Chrome, open <code>chrome://extensions</code> and turn on <strong>Developer mode</strong> (top right).", "Click <strong>Load unpacked</strong> and pick the unzipped folder (the one with <code>manifest.json</code> in it).", "Pin it from the puzzle-piece menu, then click <strong>Free Review</strong> when a game ends on chess.com."]]],
     winSteps: [["Load it in Chrome", ["Luv Launcher opened the extension's folder and Chrome's extensions page for you.", "In Chrome, turn on <strong>Developer mode</strong> (top right).", "Click <strong>Load unpacked</strong> and pick the folder Luv Launcher opened (the one with <code>manifest.json</code> in it).", "Pin it from the puzzle-piece menu, then click <strong>Free Review</strong> when a game ends on chess.com."]]] },
+  { id: "answerlens", name: "Answer Lens", kind: "app", topic: "Study extension", logo: "img/answer-lens.png", art: "#D6EAFF",
+    tags: ["Chrome extension", "Free AI"],
+    short: "Snap any question on a page and get the answer with the steps.",
+    desc: "Snap a question on any web page and get the answer with the steps, and an explanation if you want one. Snap the whole screen, just a box, or up to 3 parts at once, or right-click text or a picture. It also has an AI chat that can read pictures, and flashcards the AI makes for you. It runs on Chrome's own built-in AI on your PC, so it's free, has no daily limit and works offline.",
+    zip: { url: GH + "answer-lens/archive/refs/heads/main.zip", size: "0.1 MB" },
+    repo: GH + "answer-lens",
+    steps: [["In Chrome on a PC", ["Unzip the download somewhere you'll keep it, like Documents. Chrome runs the extension from that folder, so don't delete it.", "In Chrome, open <code>chrome://extensions</code> and turn on <strong>Developer mode</strong> (top right).", "Click <strong>Load unpacked</strong> and pick the unzipped folder (the one with <code>manifest.json</code> in it).", "Pin it from the puzzle-piece menu and click it. The first time, press <strong>Set up the AI</strong>: Chrome downloads its free AI once (a few GB)."]]],
+    winSteps: [["Load it in Chrome", ["Luv Launcher opened the extension's folder and Chrome's extensions page for you.", "In Chrome, turn on <strong>Developer mode</strong> (top right).", "Click <strong>Load unpacked</strong> and pick the folder Luv Launcher opened (the one with <code>manifest.json</code> in it).", "Pin it from the puzzle-piece menu and click it. The first time, press <strong>Set up the AI</strong>: Chrome downloads its free AI once (a few GB)."]]] },
   { id: "eretz", name: "Eretz Ir", he: "ארץ עיר", kind: "game", topic: "Party game", logo: "img/eretz-ir.png", art: "#1B2B45",
     tags: ["Website", "Android", "Hebrew"],
     short: "Spin for a letter and race to fill in every category.",
@@ -439,7 +447,7 @@ function stepsHtml(a) {
   if (HOST === "win") groups = a.winSteps || null;
   if (HOST === "android") groups = a.android ? [["Installing", ["The first time, Android asks to let Luv Launcher install apps. Turn it on, go back, then tap <strong>Install</strong>."]]] : null;
   if (!groups) return "";
-  const open = HOST === "win" && a.id === "review" && (st.review || {}).installed ? " open" : "";
+  const open = HOST === "win" && a.zip && (st[a.id] || {}).installed ? " open" : "";
   return `<details${open}><summary><i class="ic i-info"></i>${HOST === "web" ? "How to install" : "Good to know"}</summary><div class="steps">${groups.map(g => `<b>${g[0]}</b><ol>${g[1].map(x => `<li>${x}</li>`).join("")}</ol>`).join("")}</div></details>`;
 }
 function statusLine(a) {

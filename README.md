@@ -12,6 +12,7 @@ What's inside:
 - **Repertoire Trainer**: chess opening trainer with a spoken coach (website, Windows, Android)
 - **Schedule Maker**: daily and weekly planner with focus mode (Android, Windows, website)
 - **Free Game Review**: Chrome extension that reviews finished chess.com games with Stockfish
+- **Answer Lens**: Chrome extension that answers any question you snap on a page, with steps, AI chat and flashcards (free, on Chrome's built-in AI)
 - **Eretz Ir**: Hebrew letter-spinner for the categories game (website, Android)
 - **PULSE**: dark dungeon game in Python
 
